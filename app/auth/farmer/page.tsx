@@ -20,7 +20,7 @@ export default function FarmerAuthPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setError('OTP service requires API keys. Use the Demo Login button above.');
+      setError('OTP login coming soon. Use the Demo Login button above.');
     }, 600);
   };
 
