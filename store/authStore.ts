@@ -29,6 +29,8 @@ interface AuthStore {
  * Persists to localStorage so login survives refresh.
  * Will be replaced with real Supabase auth when keys are added.
  */
+import { useCartStore } from './cartStore';
+
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
@@ -41,6 +43,11 @@ export const useAuthStore = create<AuthStore>()(
 
       logout: () => {
         set({ user: null, isAuthenticated: false });
+        if (typeof window !== 'undefined') {
+          useCartStore.getState().clearCart();
+          // Optional hard redirect to ensure all states clear out from memory
+          window.location.href = '/';
+        }
       },
     }),
     {

@@ -21,44 +21,53 @@
   --terra-100: #FAE5DC;
 
   /* Brand Olive */
-  --olive-700: #4A5D23;
+  --olive-700: #5C6B3A;
   --olive-500: #7A8C3A;
   --olive-100: #EAF0D0;
 
-  /* Neutrals — warm off-whites */
-  --bg-base:   #F5F5F0;
+  /* Sand */
+  --sand: #EDE8DF;
+
+  /* Neutrals — warm parchment */
+  --bg-base:   #F9F6F0;
   --bg-card:   #FFFFFF;
   --bg-muted:  #FAFAF7;
-  --border:    #E6E4D9;
+  --border:    #D6CFC4;
   --border-focus: #1B4332;
+
+  /* Consumer accent */
+  --orange-cta: #FF6B35;
+  --orange-cta-hover: #E85A28;
+  --gold-badge: #FFD166;
 
   /* Text */
   --text-primary:   #1A211B;
   --text-secondary: #4A5568;
   --text-muted:     #9BA3A5;
+  --text-olive:     #5C6B3A;
   --text-inverse:   #FFFFFF;
 
   /* Portal accent colors */
   --farmer-primary:    #1B4332;
   --farmer-accent:     #D97757;
-  --consumer-primary:  #2D6A4F;
-  --consumer-accent:   #F59E0B;
+  --consumer-primary:  #0A6640;
+  --consumer-accent:   #FF6B35;
   --wholesaler-primary:#1A2E5A;
   --wholesaler-accent: #3B82F6;
   --admin-primary:     #1F1F2E;
   --admin-accent:      #8B5CF6;
 
-  /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(27,67,50,0.06);
-  --shadow-md:  0 4px 24px rgba(27,67,50,0.08);
-  --shadow-lg:  0 12px 40px rgba(27,67,50,0.12);
-  --shadow-xl:  0 24px 64px rgba(27,67,50,0.16);
+  /* Shadows — subtle, earthy */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:  0 12px 40px rgba(27,67,50,0.10);
+  --shadow-xl:  0 24px 64px rgba(27,67,50,0.14);
 
   /* Radius */
   --radius-sm:  0.5rem;
-  --radius-md:  0.875rem;
-  --radius-lg:  1.25rem;
-  --radius-xl:  1.75rem;
+  --radius-md:  0.75rem;
+  --radius-lg:  1rem;
+  --radius-xl:  1.25rem;
   --radius-full: 9999px;
 
   /* Transitions */
@@ -68,7 +77,7 @@
 
   /* Layout */
   --max-width: 1280px;
-  --nav-height: 4rem;
+  --nav-height: 3.75rem;
 }
 
 /* ── Base Reset ──────────────────────────────────────────────────────────── */
@@ -94,7 +103,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-fraunces, 'Fraunces'), 'Outfit', Georgia, serif;
   line-height: 1.2;
   font-weight: 700;
   color: var(--text-primary);
@@ -135,11 +144,11 @@ input, select, textarea {
   .container { padding: 0 2rem; }
 }
 
-/* ── Cards ───────────────────────────────────────────────────────────────── */
+/* ── Cards (Stitch: 16px radius, 24px padding, subtle border) ────────────── */
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
@@ -152,13 +161,39 @@ input, select, textarea {
 .card-flat {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
 }
 
 .card-elevated {
   background: var(--bg-card);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Voice action card on dashboard */
+.voice-action-card {
+  background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.voice-action-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 50%, rgba(255,255,255,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* AI-filled field flash */
+.ai-filled {
+  animation: ai-flash 2s ease-out;
+}
+@keyframes ai-flash {
+  0%   { box-shadow: 0 0 0 3px rgba(82,183,136,0.5); }
+  100% { box-shadow: 0 0 0 0 rgba(82,183,136,0); }
 }
 
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
@@ -457,6 +492,17 @@ input, select, textarea {
 }
 @media (min-width: 769px) and (max-width: 1024px) {
   .bento-3, .bento-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── Sidebar Layout (Content + Sidebar) ─────────────────────────────────── */
+.grid-sidebar {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .grid-sidebar { grid-template-columns: 1fr; }
 }
 
 /* ── Role Pill Nav ───────────────────────────────────────────────────────── */
@@ -844,4 +890,30 @@ input[type="range"]::-moz-range-thumb {
 }
 @media (min-width: 641px) {
   .show-mobile-only { display: none !important; }
+}
+
+/* ── Product detail responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Stack hero grid on mobile */
+  div[style*="grid"][style*="1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Stack below-fold grid */
+  div[style*="1fr 2fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Similar produce: 2 cols on tablet, 1 on phone */
+  div[style*="repeat(3, 1fr)"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+@media (max-width: 480px) {
+  div[style*="repeat(2, 1fr)"],
+  div[style*="repeat(3, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Cart flex layout — stack on phone */
+  div[style*="flex: '1 1 480px'"] {
+    flex-basis: 100% !important;
+  }
 }

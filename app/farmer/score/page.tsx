@@ -82,7 +82,7 @@ export default function FarmerScorePage() {
                   <span style={{ color: '#F59E0B', letterSpacing: '2px' }}>{'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}</span>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{r.date}</span>
                 </div>
-                <div style={{ fontSize: '0.85rem', marginBottom: '0.25rem' }}>"{r.comment}"</div>
+                <div style={{ fontSize: '0.85rem', marginBottom: '0.25rem' }}>&quot;{r.comment}&quot;</div>
                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>— {r.reviewer}</div>
               </div>
             ))}

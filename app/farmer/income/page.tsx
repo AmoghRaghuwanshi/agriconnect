@@ -39,28 +39,28 @@ export default function FarmerIncomePage() {
     <main style={{ minHeight: '100vh', background: 'var(--bg-base)' }}>
       <DashboardNav />
       <div className="container" style={{ padding: '2rem 1.5rem' }}>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2rem' }}>💰 Income</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2rem' }}>💰 कमाई / Income</h1>
 
         {/* Summary cards */}
         <div className="bento bento-3" style={{ marginBottom: '2.5rem' }}>
           <div className="stat-card" style={{ textAlign: 'center' }}>
             <div className="stat-value" style={{ color: 'var(--green-900)' }}>₹{totalIncome.toLocaleString()}</div>
-            <div className="stat-label">Total Earned</div>
+            <div className="stat-label">कुल कमाई / Total Earned</div>
           </div>
           <div className="stat-card" style={{ textAlign: 'center' }}>
             <div className="stat-value">{completed.length}</div>
-            <div className="stat-label">Orders Completed</div>
+            <div className="stat-label">पूरे हुए ऑर्डर / Orders Done</div>
           </div>
           <div className="stat-card" style={{ textAlign: 'center' }}>
             <div className="stat-value">₹{completed.length > 0 ? Math.round(totalIncome / completed.length).toLocaleString() : '0'}</div>
-            <div className="stat-label">Avg Order Value</div>
+            <div className="stat-label">औसत ऑर्डर / Avg Order</div>
           </div>
         </div>
 
         {/* Bar chart */}
         {monthKeys.length > 0 && (
           <div className="card" style={{ padding: '2rem', marginBottom: '2rem' }}>
-            <h2 style={{ fontFamily: 'Outfit,sans-serif', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.5rem' }}>Monthly Revenue</h2>
+            <h2 style={{ fontFamily: 'Outfit,sans-serif', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.5rem' }}>मासिक आमदनी / Monthly Revenue</h2>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end', height: '12rem' }}>
               {monthKeys.map(k => {
                 const pct = (months[k].amount / maxAmount) * 100;
@@ -82,7 +82,7 @@ export default function FarmerIncomePage() {
 
         {/* Recent transactions table */}
         <div className="card" style={{ padding: '2rem' }}>
-          <h2 style={{ fontFamily: 'Outfit,sans-serif', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.25rem' }}>Recent Transactions</h2>
+          <h2 style={{ fontFamily: 'Outfit,sans-serif', fontWeight: 700, fontSize: '1.1rem', marginBottom: '1.25rem' }}>हाल के लेन-देन / Recent Transactions</h2>
           {completed.length === 0 ? (
             <div className="empty-state">
               <div className="empty-state-icon" style={{ fontSize: '2rem' }}>💰</div>

@@ -27,6 +27,7 @@ export interface Listing {
   views: number;
   location: string;
   state: string;
+  organic?: boolean;
 }
 
 interface ListingStore {
@@ -116,7 +117,10 @@ const SEED_LISTINGS: Listing[] = [
   },
 ];
 
-let idCounter = 100;
+let idCounter = Math.max(100, ...SEED_LISTINGS.map(l => {
+  const n = parseInt(l.id.replace(/\D/g, ''));
+  return isNaN(n) ? 0 : n;
+}));
 
 export const useListingStore = create<ListingStore>()(
   persist(

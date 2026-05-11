@@ -79,7 +79,7 @@ export default function ConsumerOrderDetailPage({ params }: { params: { id: stri
               {order.review && (
                 <div className="card-flat" style={{ padding: '1rem', marginTop: '0.5rem' }}>
                   <div style={{ color: '#F59E0B', letterSpacing: '2px', marginBottom: '0.3rem' }}>{'★'.repeat(order.review.rating)}{'☆'.repeat(5 - order.review.rating)}</div>
-                  <div style={{ fontSize: '0.85rem' }}>"{order.review.comment}"</div>
+                  <div style={{ fontSize: '0.85rem' }}>&quot;{order.review.comment}&quot;</div>
                 </div>
               )}
               {order.orderStatus === 'DELIVERED' && (

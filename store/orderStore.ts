@@ -114,7 +114,10 @@ const SEED_ORDERS: Order[] = [
   },
 ];
 
-let orderCounter = 2050;
+let orderCounter = Math.max(2050, ...SEED_ORDERS.map(o => {
+  const n = parseInt(o.id.replace(/\D/g, ''));
+  return isNaN(n) ? 0 : n;
+}));
 
 export const useOrderStore = create<OrderStore>()(
   persist(

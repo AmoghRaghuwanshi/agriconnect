@@ -17,8 +17,8 @@ export default function NotFound() {
           Page Not Found
         </h1>
         <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '2rem', fontSize: '0.95rem' }}>
-          The page you're looking for doesn't exist or has been moved.
-          Let's get you back on track.
+          The page you&apos;re looking for doesn&apos;t exist or has been moved.
+          Let&apos;s get you back on track.
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/" className="btn btn-primary">🏠 Go Home</Link>

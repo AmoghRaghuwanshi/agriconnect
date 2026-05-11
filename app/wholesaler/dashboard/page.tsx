@@ -35,7 +35,7 @@ export default function WholesalerDashboardPage() {
         <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>B2B Marketplace</p>
 
         {/* Credit Card */}
-        <Link href="/wholesaler/credit" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/wholesaler/credit" style={{ textDecoration: 'none', color: 'inherit', display: 'block', position: 'relative', zIndex: 10 }}>
           <div className="card" style={{ padding: '1.75rem', marginBottom: '1.5rem', background: 'linear-gradient(135deg, #0F172A, #1E293B)', color: '#fff', cursor: 'pointer', transition: 'transform 0.15s' }}
             onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => (e.currentTarget.style.transform = 'scale(1.01)')}
             onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => (e.currentTarget.style.transform = 'scale(1)')}>
@@ -51,15 +51,19 @@ export default function WholesalerDashboardPage() {
         {/* Stats */}
         <div className="bento bento-4" style={{ marginBottom: '2rem' }}>
           {[
-            { value: String(myOrders.length), label: 'Orders This Month' },
-            { value: '2', label: 'Pending RFQs' },
-            { value: '3', label: 'Standing Orders' },
-            { value: `₹${totalSpent.toLocaleString()}`, label: 'Total Purchased' },
+            { value: String(myOrders.length), label: 'Orders This Month', href: '/wholesaler/orders' },
+            { value: '2', label: 'Pending RFQs', href: '/wholesaler/rfq' },
+            { value: '3', label: 'Standing Orders', href: '/wholesaler/orders' },
+            { value: `₹${totalSpent.toLocaleString()}`, label: 'Total Purchased', href: '/wholesaler/credit' },
           ].map(s => (
-            <div key={s.label} className="stat-card" style={{ textAlign: 'center' }}>
-              <div className="stat-value">{s.value}</div>
-              <div className="stat-label">{s.label}</div>
-            </div>
+            <Link key={s.label} href={s.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="stat-card" style={{ textAlign: 'center', cursor: 'pointer', transition: 'box-shadow 0.2s, transform 0.2s' }}
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.boxShadow = ''; e.currentTarget.style.transform = ''; }}>
+                <div className="stat-value">{s.value}</div>
+                <div className="stat-label">{s.label}</div>
+              </div>
+            </Link>
           ))}
         </div>
 

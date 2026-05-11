@@ -87,11 +87,13 @@ export const useCartStore = create<CartStore>()(
         // Debounced DB sync (500ms)
         if (syncTimer) clearTimeout(syncTimer);
         syncTimer = setTimeout(async () => {
-          const supabase = getSupabaseClient();
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            await syncToDb(get().items, session.user.id);
-          }
+          try {
+            const supabase = getSupabaseClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+              await syncToDb(get().items, session.user.id);
+            }
+          } catch (_) { /* Supabase not configured — silent */ }
         }, 500);
       },
 
@@ -102,11 +104,13 @@ export const useCartStore = create<CartStore>()(
 
         if (syncTimer) clearTimeout(syncTimer);
         syncTimer = setTimeout(async () => {
-          const supabase = getSupabaseClient();
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            await syncToDb(get().items, session.user.id);
-          }
+          try {
+            const supabase = getSupabaseClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+              await syncToDb(get().items, session.user.id);
+            }
+          } catch (_) { /* Supabase not configured — silent */ }
         }, 500);
       },
 
@@ -123,11 +127,13 @@ export const useCartStore = create<CartStore>()(
 
         if (syncTimer) clearTimeout(syncTimer);
         syncTimer = setTimeout(async () => {
-          const supabase = getSupabaseClient();
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            await syncToDb(get().items, session.user.id);
-          }
+          try {
+            const supabase = getSupabaseClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+              await syncToDb(get().items, session.user.id);
+            }
+          } catch (_) { /* Supabase not configured — silent */ }
         }, 500);
       },
 
@@ -135,11 +141,13 @@ export const useCartStore = create<CartStore>()(
         set({ items: [] });
         if (syncTimer) clearTimeout(syncTimer);
         syncTimer = setTimeout(async () => {
-          const supabase = getSupabaseClient();
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session?.user) {
-            await syncToDb([], session.user.id);
-          }
+          try {
+            const supabase = getSupabaseClient();
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+              await syncToDb([], session.user.id);
+            }
+          } catch (_) { /* Supabase not configured — silent */ }
         }, 500);
       },
 

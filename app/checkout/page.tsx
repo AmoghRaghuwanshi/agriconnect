@@ -16,7 +16,7 @@ export default function CheckoutPage() {
   const { getById: getListingById } = useListingStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [address, setAddress] = useState({ label: 'Home', line1: '', city: '', state: '', pincode: '' });
+  const [address, setAddress] = useState({ label: 'Home', line1: '42 Arera Colony', city: 'Bhopal', state: 'MP', pincode: '462016' });
   const [addressError, setAddressError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -89,7 +89,7 @@ export default function CheckoutPage() {
       <div className="container" style={{ padding: '2rem 1.5rem', maxWidth: '900px', margin: '0 auto' }}>
         <h1 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '2rem' }}>🛒 Checkout</h1>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
+        <div className="grid-sidebar">
           {/* Left — Address + Items */}
           <div>
             <div className="card" style={{ padding: '2rem', marginBottom: '1.5rem' }}>

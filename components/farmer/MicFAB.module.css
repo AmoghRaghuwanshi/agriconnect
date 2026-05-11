@@ -1,0 +1,161 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   MicFAB — Floating Action Button for Farmer Voice Agent
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.fab-container {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+/* ── Transcript Bubble ──────────────────────────────────────────────────── */
+.bubble {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 1rem 1.25rem;
+  max-width: 280px;
+  min-width: 200px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  animation: slide-up 0.2s ease;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.bubbleLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.bubbleText {
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.bubbleResponse {
+  color: var(--green-900);
+  font-weight: 600;
+}
+
+/* ── FAB Button ─────────────────────────────────────────────────────────── */
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-lg);
+  flex-shrink: 0;
+}
+
+.fab:active {
+  transform: scale(0.93);
+}
+
+/* IDLE state */
+.fabIdle {
+  background: var(--terra-600);
+  color: #fff;
+}
+
+.fabIdle:hover {
+  background: var(--terra-500);
+  box-shadow: 0 8px 32px rgba(217, 119, 87, 0.4);
+}
+
+/* LISTENING state */
+.fabListening {
+  background: #DC2626;
+  color: #fff;
+  animation: voice-ring 1.2s ease-in-out infinite;
+}
+
+@keyframes voice-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.5); }
+  50%       { box-shadow: 0 0 0 16px rgba(220, 38, 38, 0); }
+}
+
+/* PROCESSING state */
+.fabProcessing {
+  background: var(--olive-700);
+  color: #fff;
+  pointer-events: none;
+}
+
+/* SPEAKING state */
+.fabSpeaking {
+  background: var(--green-900);
+  color: #fff;
+  pointer-events: none;
+}
+
+/* ERROR state */
+.fabError {
+  background: #DC2626;
+  color: #fff;
+}
+
+/* ── Waveform Animation ─────────────────────────────────────────────────── */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 1.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.waveBar {
+  width: 3px;
+  border-radius: 99px;
+  background: var(--terra-600);
+  animation: waveAnim 0.8s ease-in-out infinite;
+}
+
+.waveBar:nth-child(1) { height: 8px; animation-delay: 0ms; }
+.waveBar:nth-child(2) { height: 14px; animation-delay: 100ms; }
+.waveBar:nth-child(3) { height: 20px; animation-delay: 200ms; }
+.waveBar:nth-child(4) { height: 14px; animation-delay: 300ms; }
+.waveBar:nth-child(5) { height: 8px; animation-delay: 400ms; }
+
+@keyframes waveAnim {
+  0%, 100% { transform: scaleY(0.4); }
+  50%       { transform: scaleY(1); }
+}
+
+/* ── Unsupported Banner ─────────────────────────────────────────────────── */
+.unsupported {
+  display: none;
+}
+
+/* ── Mobile adjustments ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .fab-container {
+    bottom: 6rem;
+    right: 1rem;
+  }
+
+  .bubble {
+    max-width: 240px;
+  }
+}

@@ -35,8 +35,8 @@ export default function FarmerListingsPage() {
       <DashboardNav />
       <div className="container" style={{ padding: '2rem 1.5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>My Listings</h1>
-          <Link href="/farmer/listings/new" className="btn btn-primary" id="new-listing-btn">+ New Listing</Link>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800 }}>मेरी Listings / My Listings</h1>
+          <Link href="/farmer/listings/new" className="btn btn-primary" id="new-listing-btn">+ नई Listing</Link>
         </div>
 
         {/* Filter tabs */}
@@ -52,8 +52,8 @@ export default function FarmerListingsPage() {
           <div className="empty-state">
             <div className="empty-state-icon" style={{ fontSize: '3rem' }}>🌾</div>
             <div className="empty-state-title">No listings {tab !== 'ALL' ? `with status "${tab.toLowerCase()}"` : 'yet'}</div>
-            <div className="empty-state-text">Bechne ke liye listing banao!</div>
-            <Link href="/farmer/listings/new" className="btn btn-primary" style={{ marginTop: '1rem' }}>Create Listing</Link>
+            <div className="empty-state-text">बेचने के लिए listing बनाओ!</div>
+            <Link href="/farmer/listings/new" className="btn btn-primary" style={{ marginTop: '1rem' }}>नई Listing बनाएं</Link>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

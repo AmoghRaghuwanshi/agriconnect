@@ -50,16 +50,20 @@ export default function AdminDashboardPage() {
 
         <div className="bento bento-4" style={{ marginBottom: '2rem' }}>
           {[
-            { value: '1,247', label: 'Total Users', icon: '👥' },
-            { value: String(listings.filter(l => l.status === 'ACTIVE').length), label: 'Active Listings', icon: '📋' },
-            { value: String(orders.length), label: 'Total Orders', icon: '📦' },
-            { value: `₹${totalRevenue.toLocaleString()}`, label: 'Total Revenue', icon: '💰' },
+            { value: '1,247', label: 'Total Users', icon: '👥', href: '/admin/users' },
+            { value: String(listings.filter(l => l.status === 'ACTIVE').length), label: 'Active Listings', icon: '📋', href: '/admin/orders' },
+            { value: String(orders.length), label: 'Total Orders', icon: '📦', href: '/admin/orders' },
+            { value: `₹${totalRevenue.toLocaleString()}`, label: 'Total Revenue', icon: '💰', href: '/admin/analytics' },
           ].map(s => (
-            <div key={s.label} className="stat-card" style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{s.icon}</div>
-              <div className="stat-value" style={{ fontSize: '1.5rem' }}>{s.value}</div>
-              <div className="stat-label">{s.label}</div>
-            </div>
+            <Link key={s.label} href={s.href} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div className="stat-card" style={{ textAlign: 'center', cursor: 'pointer', transition: 'box-shadow 0.2s, transform 0.2s' }}
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.boxShadow = ''; e.currentTarget.style.transform = ''; }}>
+                <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>{s.icon}</div>
+                <div className="stat-value" style={{ fontSize: '1.5rem' }}>{s.value}</div>
+                <div className="stat-label">{s.label}</div>
+              </div>
+            </Link>
           ))}
         </div>
 
