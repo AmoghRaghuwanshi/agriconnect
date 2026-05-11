@@ -7,6 +7,8 @@ import { useAuthStore, DEMO_USERS } from '@/store/authStore';
 
 export default function FarmerAuthPage() {
   const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState<'phone' | 'otp'>('phone');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -17,11 +19,54 @@ export default function FarmerAuthPage() {
     setError('');
     const cleaned = phone.replace(/\D/g, '');
     if (cleaned.length !== 10) { setError('Please enter a valid 10-digit mobile number.'); return; }
+    
     setLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/auth/otp/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: cleaned })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to send OTP');
+      }
+      
+      setStep('otp');
+    } catch (err) {
+      setError(String(err).replace('Error: ', ''));
+    } finally {
       setLoading(false);
-      setError('OTP login coming soon. Use the Demo Login button above.');
-    }, 600);
+    }
+  };
+
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (otp.length !== 6) { setError('Please enter a valid 6-digit OTP.'); return; }
+    
+    setLoading(true);
+    try {
+      const cleanedPhone = phone.replace(/\D/g, '');
+      const res = await fetch('/api/auth/otp/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: cleanedPhone, otp })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Invalid OTP');
+      }
+      
+      login(data.user);
+      router.push('/farmer/dashboard');
+    } catch (err) {
+      setError(String(err).replace('Error: ', ''));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDemoLogin = () => {
@@ -61,32 +106,62 @@ export default function FarmerAuthPage() {
 
             <div className="divider">or login with OTP</div>
 
-            <form onSubmit={handleSendOTP}>
-              <div className="form-group" style={{ textAlign: 'left' }}>
-                <label className="label" htmlFor="farmer-phone">Mobile Number</label>
-                <div className="input-group">
-                  <span className="input-group-icon" style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>+91</span>
+            {step === 'phone' ? (
+              <form onSubmit={handleSendOTP}>
+                <div className="form-group" style={{ textAlign: 'left' }}>
+                  <label className="label" htmlFor="farmer-phone">Mobile Number</label>
+                  <div className="input-group">
+                    <span className="input-group-icon" style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>+91</span>
+                    <input
+                      id="farmer-phone"
+                      type="tel"
+                      className="input"
+                      placeholder="9876543210"
+                      value={phone}
+                      onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      maxLength={10}
+                      style={{ paddingLeft: '3rem' }}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {error && <div className="alert alert-error" style={{ marginBottom: '1rem', textAlign: 'left' }}><span>⚠️</span><span style={{ fontSize: '0.85rem' }}>{error}</span></div>}
+
+                <button id="farmer-send-otp-btn" type="submit" className="btn btn-outline" disabled={loading || phone.length !== 10}
+                  style={{ width: '100%', justifyContent: 'center' }}>
+                  {loading ? <span className="spinner" style={{ width: '1rem', height: '1rem' }} /> : '📱 Send OTP via SMS'}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleVerifyOTP}>
+                <div className="form-group" style={{ textAlign: 'left' }}>
+                  <label className="label" htmlFor="farmer-otp">Enter 6-digit OTP sent to +91 {phone}</label>
                   <input
-                    id="farmer-phone"
-                    type="tel"
+                    id="farmer-otp"
+                    type="text"
                     className="input"
-                    placeholder="9876543210"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                    maxLength={10}
-                    style={{ paddingLeft: '3rem' }}
+                    placeholder="123456"
+                    value={otp}
+                    onChange={e => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                    maxLength={6}
+                    style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '0.5rem' }}
                     required
+                    autoFocus
                   />
                 </div>
-              </div>
 
-              {error && <div className="alert alert-error" style={{ marginBottom: '1rem', textAlign: 'left' }}><span>⚠️</span><span style={{ fontSize: '0.85rem' }}>{error}</span></div>}
+                {error && <div className="alert alert-error" style={{ marginBottom: '1rem', textAlign: 'left' }}><span>⚠️</span><span style={{ fontSize: '0.85rem' }}>{error}</span></div>}
 
-              <button id="farmer-send-otp-btn" type="submit" className="btn btn-outline" disabled={loading}
-                style={{ width: '100%', justifyContent: 'center' }}>
-                {loading ? <span className="spinner" style={{ width: '1rem', height: '1rem' }} /> : '📱 Send OTP via WhatsApp'}
-              </button>
-            </form>
+                <button id="farmer-verify-otp-btn" type="submit" className="btn btn-primary" disabled={loading || otp.length !== 6}
+                  style={{ width: '100%', justifyContent: 'center' }}>
+                  {loading ? <span className="spinner" style={{ width: '1rem', height: '1rem', borderTopColor: '#fff' }} /> : '✅ Verify & Login'}
+                </button>
+                <button type="button" className="btn btn-ghost btn-sm" onClick={() => { setStep('phone'); setOtp(''); setError(''); }} style={{ marginTop: '0.5rem', width: '100%' }}>
+                  ← Back to phone
+                </button>
+              </form>
+            )}
 
             <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--green-50)', borderRadius: 'var(--radius-md)', textAlign: 'left' }}>
               <p style={{ fontSize: '0.8rem', color: 'var(--green-900)', fontWeight: 600, marginBottom: '0.25rem' }}>🎤 Hindi Voice Support</p>
