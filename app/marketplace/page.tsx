@@ -72,10 +72,10 @@ export default function MarketplacePage() {
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(l =>
-        l.cropName.toLowerCase().includes(q) ||
-        l.farmerName.toLowerCase().includes(q) ||
-        l.location.toLowerCase().includes(q) ||
-        l.variety.toLowerCase().includes(q)
+        (l.cropName || '').toLowerCase().includes(q) ||
+        (l.farmerName || '').toLowerCase().includes(q) ||
+        (l.location || '').toLowerCase().includes(q) ||
+        (l.variety || '').toLowerCase().includes(q)
       );
     }
 

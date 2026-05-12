@@ -1,14 +1,19 @@
 import { neon } from '@neondatabase/serverless';
 import { NextResponse } from 'next/server';
+import twilio from 'twilio';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   const databaseUrl = process.env.DATABASE_URL;
-  const fast2SmsKey = process.env.FAST2SMS_API_KEY;
+  const twilioAccountSid = process.env.TWILIO_ACCOUNT_SID;
+  const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+  const twilioVerifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
 
   if (!databaseUrl) return NextResponse.json({ error: 'DB not configured' }, { status: 500 });
-  if (!fast2SmsKey) return NextResponse.json({ error: 'SMS service not configured' }, { status: 500 });
+  if (!twilioAccountSid || !twilioAuthToken || !twilioVerifyServiceSid) {
+    return NextResponse.json({ error: 'Twilio service not configured' }, { status: 500 });
+  }
 
   const { phone } = await request.json();
   if (!phone || phone.length !== 10) {
@@ -31,34 +36,20 @@ export async function POST(request: Request) {
       `;
     }
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60000).toISOString(); // 10 mins
+    // Initialize Twilio Client
+    const client = twilio(twilioAccountSid, twilioAuthToken);
 
-    // Save OTP
-    await sql`UPDATE users SET otp = ${otp}, otp_expires_at = ${expiresAt} WHERE id = ${userId}`;
+    // Send OTP via Twilio Verify (Twilio automatically generates and sends the 6-digit code)
+    const verification = await client.verify.v2
+      .services(twilioVerifyServiceSid)
+      .verifications.create({ to: '+91' + phone, channel: 'sms' });
 
-    // Send via Fast2SMS
-    const response = await fetch('https://www.fast2sms.com/dev/bulkV2', {
-      method: 'POST',
-      headers: {
-        'authorization': fast2SmsKey,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        route: 'otp',
-        variables_values: otp,
-        numbers: phone
-      })
-    });
-
-    const data = await response.json();
-    if (!data.return) {
-      console.error('Fast2SMS Error:', data);
-      return NextResponse.json({ error: 'Failed to send OTP via SMS. Check API key.' }, { status: 500 });
+    if (verification.status === 'pending' || verification.status === 'approved') {
+      return NextResponse.json({ success: true, message: 'OTP sent successfully' });
+    } else {
+      console.error('Twilio Error:', verification);
+      return NextResponse.json({ error: 'Failed to send OTP via SMS.' }, { status: 500 });
     }
-
-    return NextResponse.json({ success: true, message: 'OTP sent successfully' });
   } catch (error) {
     console.error('Send OTP error:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });

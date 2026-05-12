@@ -56,7 +56,13 @@ export default function AdminUsersPage() {
   };
 
   let filtered = users;
-  if (search) filtered = filtered.filter(u => u.name.toLowerCase().includes(search.toLowerCase()) || u.contact.toLowerCase().includes(search.toLowerCase()));
+  if (search) {
+    const s = search.toLowerCase();
+    filtered = filtered.filter(u => 
+      (u.name || '').toLowerCase().includes(s) || 
+      (u.contact || '').toLowerCase().includes(s)
+    );
+  }
   if (roleFilter !== 'ALL') filtered = filtered.filter(u => u.role === roleFilter);
 
   const roleBadge: Record<string, string> = { FARMER: 'badge-green', CONSUMER: 'badge-blue', WHOLESALER: 'badge-purple' };
