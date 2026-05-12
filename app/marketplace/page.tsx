@@ -50,6 +50,13 @@ export default function MarketplacePage() {
   useEffect(() => {
     setMounted(true);
     fetchListings(); // Load from Neon DB
+    
+    // Read search param from URL (from landing page search)
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      if (q) setSearch(q);
+    }
   }, [fetchListings]);
 
   // Get only active listings (visible to consumers)
