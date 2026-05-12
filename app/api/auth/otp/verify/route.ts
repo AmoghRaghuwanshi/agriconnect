@@ -36,19 +36,15 @@ export async function POST(request: Request) {
     // Initialize Twilio Client
     const client = twilio(twilioAccountSid, twilioAuthToken);
     
-    // Verify OTP with Twilio (bypass for demo/hackathon purposes)
+    // Verify OTP with Twilio
     let verificationCheck;
-    if (otp === '123456') {
-      verificationCheck = { status: 'approved' };
-    } else {
-      try {
-        verificationCheck = await client.verify.v2
-          .services(twilioVerifyServiceSid)
-          .verificationChecks.create({ to: '+91' + phone, code: otp });
-      } catch (twError: any) {
-        console.error('Twilio Verify Check error:', twError);
-        return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 401 });
-      }
+    try {
+      verificationCheck = await client.verify.v2
+        .services(twilioVerifyServiceSid)
+        .verificationChecks.create({ to: '+91' + phone, code: otp });
+    } catch (twError: any) {
+      console.error('Twilio Verify Check error:', twError);
+      return NextResponse.json({ error: 'Invalid or expired OTP' }, { status: 401 });
     }
 
     if (verificationCheck.status !== 'approved') {
